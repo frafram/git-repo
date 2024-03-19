@@ -1,0 +1,53 @@
+---
+
+- name: Autoremove 'apt' package for Debian, Ubuntu
+  hosts: all
+
+  pre_tasks:
+    - name: check storage space - before
+      shell: df -h
+      register: check_storage_space_before
+
+    - name: print storage space
+      debug:
+        msg: "{{ check_storage_space_before.stdout_lines }}"
+
+    - name: apt autoremove check
+      command: apt-get -y --dry-run autoremove
+      register: apt_autoremove_output
+
+    - name: print apt autoremove packages
+      debug:
+        msg: "{{ apt_autoremove_output.stdout_lines }}"
+
+    - name: apt autoclean check
+      command: apt-get -y --dry-run autoclean
+      register: apt_autoclean_output
+
+    - name: print apt autoclean dependencies
+      debug:
+        msg: "{{ apt_autoclean_output.stdout_lines }}"
+
+
+  tasks:
+    - name: autoremove unused packages
+      become: yes
+      apt:
+        autoremove: yes
+      changed_when: "'The following packages will be REMOVED' in apt_autoremove_output.stdout"
+
+  tasks:
+    - name: autoremove packages dependencies
+      become: yes
+      apt:
+        autoclean: yes
+      changed_when: "'The following dependencies will be REMOVED' in apt_autoclean_output.stdout"
+
+  post_tasks:
+    - name: check storage space - after
+      shell: df -h
+      register: check_storage_space_after
+
+    - name: print storage space
+      debug:
+        msg: "{{ check_storage_space_after.stdout_lines }}"

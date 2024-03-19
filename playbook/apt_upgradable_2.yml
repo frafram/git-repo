@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name:
+      apt:
+       update_cache: yes
+    - name:
+#      command: apt list --upgradable
+      command: apt-get -s upgrade
+      args:
+       warn: False
+      register: updates
+    - debug: var=updates.stdout_lines
