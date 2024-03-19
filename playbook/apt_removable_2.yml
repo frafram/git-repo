@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name:
+      apt:
+       update_cache: yes
+    - name:
+#      command: apt list --upgradable
+      command: apt-get autoremove -s
+      register: removable
+    - debug: var=removable.stdout_lines
