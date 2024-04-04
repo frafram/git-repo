@@ -22,6 +22,7 @@ ansible_winrm_transport=ntlm
 ansible_winrm_server_cert_validation=ignore
 #ansible_winrm_kerberos_delegation=true
 ansible_winrm_kinit_mode=manual
+ansible_winrm_operation_timeout_sec=3600
 ansible_shell_type=powershell
 shell_type=powershell
 operation_timeout_sec=600

@@ -4,6 +4,12 @@
 # http://docs.ansible.com/ansible/win_updates_module.html
 # https://docs.ansible.com/ansible/win_reboot_module.html
 
+# Search and download Windows updates
+- name: Search and download Windows updates without installing them
+  win_updates:
+    state: downloaded
+
+
 - name:  Windows Update
   hosts: all
   gather_facts: false
